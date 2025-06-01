@@ -16,6 +16,8 @@ module.exports = defineConfig({
       on("before:browser:launch", (browser = {}, launchOptions) => {
         if (browser.name === "chrome" || browser.name === "chromium") {
           launchOptions.args.push("--enable-unsafe-swiftshader");
+          launchOptions.args.push("--use-gl=swiftshader");
+          launchOptions.args.push("--disable-gpu");
         }
         return launchOptions;
       });
