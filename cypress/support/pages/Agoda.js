@@ -6,7 +6,7 @@ class AgodaPage {
     cy.visit(Cypress.env("AGODA_URL"));
     cy.contains("Flights").click();
 
-    cy.get("button[aria-label='Close']").click();
+    // cy.get("button[aria-label='Close']").click();
 
     cy.get("#flight-origin-search-input").click().clear().type(data.origin);
     cy.xpath(`//li[@aria-label='Destination ${data.origin}']`).click();
