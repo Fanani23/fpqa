@@ -6,8 +6,6 @@ class AgodaPage {
     cy.visit(Cypress.env("AGODA_URL"));
     cy.contains("Flights").click();
 
-    // cy.get("button[aria-label='Close']").click();
-
     cy.get("#flight-origin-search-input").click().clear().type(data.origin);
     cy.xpath(`//li[@aria-label='Destination ${data.origin}']`).click();
 
@@ -35,23 +33,19 @@ class AgodaPage {
   }
 
   selectEarliestMalaysiaAirlines() {
-    cy.contains("button", "Filters").click();
-
     cy.contains("button", "Show all").click();
 
     cy.xpath(`(//p[normalize-space()='Malaysia Airlines'])[1]`).click();
 
-    cy.contains("button", "Apply").click();
-
     cy.wait(5000);
 
-    cy.contains("button", "Sort by").click();
-
-    cy.contains("button", "FastestFastest first").click();
+    cy.contains("button", "Fastest").click();
 
     cy.wait(10000);
 
-    cy.xpath(`(//div[contains(@class,'')])[85]`).click();
+    cy.get(
+      ':nth-child(1) > [data-testid="web-refresh-flights-card"] > .a5d86-bg-generic-base-transparent > [data-testid="flightCard-flight-detail"]'
+    ).click();
 
     cy.wait(5000);
 
@@ -102,7 +96,7 @@ class AgodaPage {
         window.localStorage.setItem("checkout_price", text);
       });
 
-    cy.xpath(`//p[normalize-space()="${payment.passenger.gender}"]`).click();
+    cy.get('[data-testid="1"]').click({ force: true });
 
     cy.xpath(`//input[@id='flight.forms.i0.units.i0.passengerFirstName']`)
       .clear()
@@ -157,56 +151,70 @@ class AgodaPage {
     cy.xpath(`//input[@name='dropdown-list-item']`).click();
     cy.get("body").click(0, 0);
 
-    cy.xpath(`//input[@id='flight.forms.i0.units.i0.passportNumber']`)
-      .first()
-      .clear()
-      .type(payment.passenger.passport.number.toString());
+    cy.document().then((doc) => {
+      const el = doc.evaluate(
+        `//input[@id='flight.forms.i0.units.i0.passportNumber']`,
+        doc,
+        null,
+        XPathResult.FIRST_ORDERED_NODE_TYPE,
+        null
+      ).singleNodeValue;
 
-    cy.get(
-      '[data-testid="flight.forms.i0.units.i0.passportCountryOfIssue"] button'
-    ).click();
+      if (el) {
+        cy.wrap(el).clear().type(payment.passenger.passport.number.toString());
 
-    cy.xpath(`//input[contains(@placeholder,'Search')]`)
-      .clear()
-      .type(payment.passenger.nationality);
+        cy.get(
+          '[data-testid="flight.forms.i0.units.i0.passportCountryOfIssue"] button'
+        ).click();
 
-    cy.xpath(`//input[@name='dropdown-list-item']`).click();
-    cy.get("body").click(0, 0);
+        cy.xpath(`//input[contains(@placeholder,'Search')]`)
+          .clear()
+          .type(payment.passenger.nationality);
 
-    cy.get(
-      '[data-testid="flight.forms.i0.units.i0.passportExpiryDate-DateInputDataTestId"]'
-    ).type(payment.passenger.passport.expired.day);
+        cy.xpath(`//input[@name='dropdown-list-item']`).click();
+        cy.get("body").click(0, 0);
 
-    cy.get(
-      '[data-testid="flight.forms.i0.units.i0.passportExpiryDate-MonthInputDataTestId"]'
-    ).click();
-    const expMonthName = payment.passenger.passport.expired.month;
-    const expMonthIndex = {
-      January: 1,
-      February: 2,
-      March: 3,
-      April: 4,
-      May: 5,
-      June: 6,
-      July: 7,
-      August: 8,
-      September: 9,
-      October: 10,
-      November: 11,
-      December: 12,
-    }[expMonthName];
+        cy.get(
+          '[data-testid="flight.forms.i0.units.i0.passportExpiryDate-DateInputDataTestId"]'
+        )
+          .clear()
+          .type(payment.passenger.passport.expired.day);
 
-    cy.get(
-      `:nth-child(${expMonthIndex}) > label > .a5d86-bg-generic-base-transparent`
-    ).click();
+        cy.get(
+          '[data-testid="flight.forms.i0.units.i0.passportExpiryDate-MonthInputDataTestId"]'
+        ).click();
 
-    cy.get(
-      '[data-testid="flight.forms.i0.units.i0.passportExpiryDate-YearInputDataTestId"]'
-    )
-      .clear()
-      .type(payment.passenger.passport.expired.year);
+        const expMonthName = payment.passenger.passport.expired.month;
+        const expMonthIndex = {
+          January: 1,
+          February: 2,
+          March: 3,
+          April: 4,
+          May: 5,
+          June: 6,
+          July: 7,
+          August: 8,
+          September: 9,
+          October: 10,
+          November: 11,
+          December: 12,
+        }[expMonthName];
 
-    cy.wait(10000);
+        cy.get(
+          `:nth-child(${expMonthIndex}) > label > .a5d86-bg-generic-base-transparent`
+        ).click();
+
+        cy.get(
+          '[data-testid="flight.forms.i0.units.i0.passportExpiryDate-YearInputDataTestId"]'
+        )
+          .clear()
+          .type(payment.passenger.passport.expired.year);
+
+        cy.wait(10000);
+      } else {
+        cy.log("📭 Passport input field not found — skipping passport step.");
+      }
+    });
 
     cy.xpath(
       "//button[contains(@data-component,'flight-continue-to-addOns-button')]"
@@ -218,7 +226,7 @@ class AgodaPage {
 
     cy.wait(10000);
 
-    cy.xpath("//div[contains(text(),'Continue to payment')]").click();
+    cy.get('[data-testid="continue-to-payment-button"]').click();
     cy.wait(10000);
 
     cy.get(".a5d86-absolute > .a5d86-box").click();

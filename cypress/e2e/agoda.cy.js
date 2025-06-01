@@ -3,6 +3,8 @@ const agodaPage = require("../support/pages/Agoda");
 
 describe("Agoda flight booking", () => {
   it("should book earliest Malaysia Airlines flight for tomorrow", () => {
+    cy.viewport(1920, 1080);
+
     let data = {
       origin: booker.origin,
       destination: booker.destination,
