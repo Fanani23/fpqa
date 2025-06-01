@@ -1,0 +1,10 @@
+{
+  "acceptCookies": "#sp-cc-accept",
+  "searchBox": "#twotabsearchtextbox",
+  "sortDropdown": "#a-autoid-0-announce",
+  "sortByHighPrice": "#s-result-sort-select_2",
+  "searchResult": "[data-component-type=\"s-search-result\"]",
+  "sponsoredTag": "[aria-label=\"Sponsored\"]",
+  "itemTitle": "h2 span",
+  "itemPriceFull": ".a-price .a-offscreen"
+}

@@ -1,0 +1,9 @@
+{
+  "sidebarButton": "div[id='start'] button[id='button'] div",
+  "movieButton": ".yt-tab-shape-wiz__tab--last-tab > .yt-tab-shape-wiz__tab",
+  "videoList": "ytd-video-renderer",
+  "videoTittle": "#video-title",
+  "channelName": "ytd-channel-name",
+  "videoTittleTrend": "h1.title yt-formatted-string",
+  "channelNameTrend": "ytd-channel-name a"
+}
