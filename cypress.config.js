@@ -1,4 +1,3 @@
-// cypress.config.js
 const { defineConfig } = require("cypress");
 
 module.exports = defineConfig({
@@ -13,5 +12,13 @@ module.exports = defineConfig({
     video: true,
     chromeWebSecurity: false,
     pageLoadTimeout: 120000,
+    setupNodeEvents(on, config) {
+      on("before:browser:launch", (browser = {}, launchOptions) => {
+        if (browser.name === "chrome" || browser.name === "chromium") {
+          launchOptions.args.push("--enable-unsafe-swiftshader");
+        }
+        return launchOptions;
+      });
+    },
   },
 });
