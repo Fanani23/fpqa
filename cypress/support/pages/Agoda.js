@@ -139,7 +139,7 @@ class AgodaPage {
     }[monthName];
 
     cy.get(
-      `:nth-child(${monthIndex}) > label > .a5d86-bg-generic-base-transparent`
+      `:nth-child([1]) > label > .a5d86-bg-generic-base-transparent`
     ).click();
 
     cy.get(
@@ -209,7 +209,7 @@ class AgodaPage {
         }[expMonthName];
 
         cy.get(
-          `:nth-child(${expMonthIndex}) > label > .a5d86-bg-generic-base-transparent`
+          `:nth-child([1]) > label > .a5d86-bg-generic-base-transparent`
         ).click();
 
         cy.get(
